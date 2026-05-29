@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kost Tulungagung — Direktori Hunian Modern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg-start:#0d1225;--accent:#82cfff;--accent2:#a78bfa;--green:#34d399;--glass:rgba(255,255,255,0.07);--glass-md:rgba(255,255,255,0.11);--glass-border:rgba(255,255,255,0.15);--glass-hover:rgba(130,207,255,0.4);--text:#f0f4ff;--text-muted:rgba(240,244,255,0.5);--card-shadow:0 20px 60px rgba(0,0,0,0.45);--r-card:24px;--r-sm:14px}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Nunito',sans-serif;background:var(--bg-start);min-height:100vh;color:var(--text);overflow-x:hidden}
+        .bg-layer{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at 15% 15%,#3b5fff40 0%,transparent 60%),radial-gradient(ellipse 55% 50% at 85% 85%,#7c3aed35 0%,transparent 60%),radial-gradient(ellipse 80% 70% at 50% 50%,#1a2560 0%,#0d1225 100%);animation:bgShift 14s ease-in-out infinite alternate}
+        @keyframes bgShift{from{filter:hue-rotate(0deg) brightness(1)}to{filter:hue-rotate(12deg) brightness(1.08)}}
+        .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.2;pointer-events:none;z-index:0;animation:floatOrb 18s ease-in-out infinite alternate}
+        .orb-1{width:500px;height:500px;background:#60a5fa;top:-120px;left:-100px;animation-duration:14s}
+        .orb-2{width:420px;height:420px;background:#a78bfa;bottom:-80px;right:-80px;animation-duration:20s}
+        .orb-3{width:280px;height:280px;background:#34d399;top:45%;left:42%;animation-duration:22s;opacity:0.12}
+        @keyframes floatOrb{from{transform:translate(0,0) scale(1)}to{transform:translate(35px,28px) scale(1.1)}}
+        body::before{content:'';position:fixed;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none}
+        .wrapper{position:relative;z-index:2;max-width:1320px;margin:0 auto;padding:0 24px 80px}
+        /* HEADER */
+        header{text-align:center;padding:70px 20px 30px;animation:fadeDown .9s cubic-bezier(.22,1,.36,1) both}
+        @keyframes fadeDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+        .logo-pill{display:inline-flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px);border-radius:100px;padding:6px 18px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+        .logo-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:pulse 2s ease-in-out infinite}
+        @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
+        header h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:700;line-height:1.1;letter-spacing:-1px;background:linear-gradient(135deg,#fff 30%,#82cfff 70%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px}
+        header p{color:var(--text-muted);font-size:1.05rem;font-weight:500;max-width:420px;margin:0 auto;line-height:1.6}
+        .stats-bar{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:26px auto 0;max-width:480px;animation:fadeDown 1s .15s cubic-bezier(.22,1,.36,1) both}
+        .stat{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(16px);border-radius:100px;padding:8px 20px;font-size:.82rem;font-weight:600;color:var(--text-muted)}
+        .stat strong{color:var(--text);margin-right:4px}
+        /* SEARCH */
+        .search-wrap{position:sticky;top:16px;z-index:50;max-width:560px;margin:32px auto 40px;animation:fadeDown 1s .25s cubic-bezier(.22,1,.36,1) both}
+        .search-inner{position:relative}
+        .search-icon{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;display:flex}
+        #searchInput{width:100%;padding:17px 20px 17px 52px;border-radius:100px;border:1px solid var(--glass-border);background:rgba(255,255,255,0.08);backdrop-filter:blur(30px);font-size:1rem;font-family:'Nunito',sans-serif;font-weight:500;color:var(--text);outline:none;transition:all .35s;box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.1)}
+        #searchInput::placeholder{color:var(--text-muted)}
+        #searchInput:focus{background:rgba(255,255,255,.13);border-color:rgba(130,207,255,.5);box-shadow:0 8px 40px rgba(10,132,255,.25),inset 0 1px 0 rgba(255,255,255,.15),0 0 0 3px rgba(10,132,255,.15)}
+        .section-label{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;padding-left:4px}
+        /* GRID */
+        .grid-container{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+        .card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:var(--r-card);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--card-shadow);transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease,border-color .3s;animation:cardIn .7s both;animation-delay:calc(var(--i)*50ms);cursor:pointer;text-decoration:none;color:inherit}
+        @keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .card:hover{transform:translateY(-7px) scale(1.02);border-color:var(--glass-hover);box-shadow:0 32px 80px rgba(0,0,0,.55),0 0 0 1px rgba(130,207,255,.2)}
+        .card-img-wrap{position:relative;overflow:hidden;height:160px}
+        .card-img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block}
+        .card:hover .card-img{transform:scale(1.07)}
+        .card-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,rgba(10,12,30,.65) 100%)}
+        .card-badge{position:absolute;top:12px;right:12px;background:rgba(10,132,255,.85);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:100px;font-size:.68rem;font-weight:700;letter-spacing:.05em;color:#fff;padding:4px 12px}
+        .card-content{padding:18px;display:flex;flex-direction:column;gap:12px;flex:1}
+        .card-title{font-family:'Playfair Display',serif;font-size:1.12rem;font-weight:600;color:var(--text);line-height:1.3}
+        .card-meta{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--text-muted);font-weight:500}
+        .map-wrapper{border-radius:var(--r-sm);overflow:hidden;height:120px;border:1px solid var(--glass-border)}
+        iframe{width:100%;height:100%;border:none;display:block;filter:invert(.88) hue-rotate(185deg) saturate(.6) brightness(.85)}
+        .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 16px;background:linear-gradient(135deg,#0a84ff,#007aff);color:#fff;text-decoration:none;border-radius:var(--r-sm);font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;transition:all .25s;box-shadow:0 4px 20px rgba(10,132,255,.4),inset 0 1px 0 rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.15);position:relative;overflow:hidden}
+        .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .5s}
+        .btn:hover::before{left:100%}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(10,132,255,.55)}
+        .no-results{display:none;grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--text-muted);font-size:1.1rem;font-weight:500;line-height:1.8}
+        footer{text-align:center;padding:40px 20px 0;color:var(--text-muted);font-size:.85rem;font-weight:500;border-top:1px solid var(--glass-border);margin-top:60px}
+        footer span{color:var(--accent)}
+        @media(max-width:1100px){.grid-container{grid-template-columns:repeat(3,1fr)}}
+        @media(max-width:768px){.grid-container{grid-template-columns:repeat(2,1fr);gap:14px}.card-img-wrap{height:130px}.map-wrapper{height:110px}.card-content{padding:14px;gap:10px}.card-title{font-size:1rem}}
+        @media(max-width:480px){.wrapper{padding:0 14px 60px}header{padding:50px 10px 20px}.grid-container{grid-template-columns:repeat(2,1fr);gap:12px}.card-img-wrap{height:110px}.card-content{padding:12px;gap:9px}.card-title{font-size:.95rem}.map-wrapper{height:95px}.btn{padding:11px 12px;font-size:.82rem}}
+    </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="wrapper">
+    <header>
+        <div class="logo-pill"><span class="dot"></span> Tulungagung · 19 Kecamatan</div>
+        <h1>Kost Tulungagung</h1>
+        <p>Temukan hunian terbaik di setiap kecamatan Kabupaten Tulungagung</p>
+        <div class="stats-bar">
+            <div class="stat"><strong>190+</strong> Lokasi Kos</div>
+            <div class="stat"><strong>19</strong> Kecamatan</div>
+            <div class="stat"><strong>⭐ 4.8</strong> Rating</div>
+        </div>
+    </header>
+
+    <div class="search-wrap">
+        <div class="search-inner">
+            <span class="search-icon">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </span>
+            <input type="text" id="searchInput" placeholder="Cari nama kecamatan…" oninput="searchFn()">
+        </div>
+    </div>
+
+    <p class="section-label">Semua Kecamatan</p>
+    <main class="grid-container" id="grid"></main>
+    <div id="noResults" class="no-results">🔍 Kecamatan tidak ditemukan.<br>Periksa kembali ejaan Anda.</div>
+
+    <footer>© 2026 <span>Kost Tulungagung.com</span> — Pilihan Terbaik Kos di Tulungagung</footer>
+</div>
+
+<script>
+const kecamatanList = [
+    "Tulungagung","Boyolangu","Kedungwaru","Ngantru","Kauman",
+    "Pagerejo","Karangrejo","Gondang","Sendang","Pagerwojo",
+    "Campurdarat","Besuki","Pakel","Bandung","Kalidawir",
+    "Ngunut","Rejotangan","Pucanglaban","Tanggunggunung"
+];
+const photoIds = [
+    "1502672260266-1c1ef2d93688","1493663284031-b7e3aefcae8e",
+    "1584622650111-993a426fbf0a","1554995207-c18c203602cb",
+    "1598928506311-c55ded91a20c","1484154218962-a197022b5858",
+    "1513694203232-719a280e022f","1524758631624-e2822e304c36",
+    "1540518614846-7eded433c457","1560185127-6ed189bf02f4",
+    "1560448204-61dc36dc98c8","1560184897-ae75f418493e",
+    "1522771739844-6a9f6d5f14af","1512917774080-9991f1c4c750",
+    "1502672260266-1c1ef2d93688","1584622650111-993a426fbf0a",
+    "1554995207-c18c203602cb","1598928506311-c55ded91a20c","1484154218962-a197022b5858"
+];
+const kosCounts = [24,18,15,12,9,8,11,13,7,6,10,14,8,9,16,20,17,5,4];
+
+const grid = document.getElementById('grid');
+kecamatanList.forEach((kec, index) => {
+    const card = document.createElement('a');
+    card.className = 'card';
+    card.href = `${kec}.html`;
+    card.setAttribute('data-name', kec.toLowerCase());
+    card.style.setProperty('--i', index);
+    const photoId = photoIds[index];
+    card.innerHTML = `
+        <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&w=600&q=80" alt="Kos di ${kec}" class="card-img" loading="lazy">
+            <div class="card-img-overlay"></div>
+            <span class="card-badge">${kosCounts[index]}+ Kos</span>
+        </div>
+        <div class="card-content">
+            <h3 class="card-title">Kec. ${kec}</h3>
+            <div class="card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Kabupaten Tulungagung
+            </div>
+            <div class="map-wrapper">
+                <iframe src="https://www.google.com/maps?q=Kecamatan%20${encodeURIComponent(kec)}%20Tulungagung&output=embed" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <span class="btn">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Lihat Lokasi Kos
+            </span>
+        </div>
+    `;
+    grid.appendChild(card);
+});
+
+function searchFn() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+    const noRes = document.getElementById('noResults');
+    let found = false;
+    cards.forEach(c => {
+        const show = c.getAttribute('data-name').includes(q);
+        c.style.display = show ? 'flex' : 'none';
+        if(show) found = true;
+    });
+    noRes.style.display = found ? 'none' : 'block';
+}
+</script>
+</body>
+</html>
