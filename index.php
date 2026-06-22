@@ -1,9 +1,38 @@
+<?php
+require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/config/app.php';
+
+$db = getDB();
+
+// Fetch all kecamatan ordered
+$stmt = $db->query("
+    SELECT k.*, 
+           (SELECT COUNT(*) FROM kos WHERE kecamatan_id = k.id) AS jumlah_kos_real
+    FROM kecamatan k 
+    ORDER BY k.urutan ASC
+");
+$kecamatanList = $stmt->fetchAll();
+
+// Stats
+$totalKos = $db->query("SELECT COUNT(*) FROM kos")->fetchColumn();
+$totalKec = count($kecamatanList);
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kost Tulungagung — Direktori Hunian Modern</title>
+    <title>Kos Tulungagung - Info Cari Kost Murah, Bebas & Eksklusif</title>
+    <meta name="description" content="Cari Kos Tulungagung terdekat, murah, bebas, dan eksklusif. Temukan direktori lengkap info kost pria, wanita, campur, kamar mandi dalam di seluruh area Kabupaten Tulungagung.">
+    <meta name="keywords" content="kos tulungagung, kost tulungagung, info kos tulungagung, cari kost tulungagung, kos murah tulungagung, kos bebas tulungagung, kos eksklusif tulungagung, kos campur tulungagung, kos harian tulungagung, kos bulanan tulungagung, kos putra tulungagung, kos putri tulungagung">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Kos Tulungagung">
+    <meta property="og:title" content="Kos Tulungagung - Info Cari Kost Murah, Bebas & Eksklusif">
+    <meta property="og:description" content="Temukan info kos Tulungagung terbaik. Direktori pilihan lengkap kos putra, putri, campur, dengan fasilitas lengkap dan harga terjangkau di Kabupaten Tulungagung.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= SITE_URL ?>/">
+    <meta property="og:site_name" content="Kos Tulungagung">
+    <link rel="canonical" href="<?= SITE_URL ?>/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -19,7 +48,6 @@
         @keyframes floatOrb{from{transform:translate(0,0) scale(1)}to{transform:translate(35px,28px) scale(1.1)}}
         body::before{content:'';position:fixed;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none}
         .wrapper{position:relative;z-index:2;max-width:1320px;margin:0 auto;padding:0 24px 80px}
-        /* HEADER */
         header{text-align:center;padding:70px 20px 30px;animation:fadeDown .9s cubic-bezier(.22,1,.36,1) both}
         @keyframes fadeDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
         .logo-pill{display:inline-flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px);border-radius:100px;padding:6px 18px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
@@ -30,7 +58,6 @@
         .stats-bar{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:26px auto 0;max-width:480px;animation:fadeDown 1s .15s cubic-bezier(.22,1,.36,1) both}
         .stat{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(16px);border-radius:100px;padding:8px 20px;font-size:.82rem;font-weight:600;color:var(--text-muted)}
         .stat strong{color:var(--text);margin-right:4px}
-        /* SEARCH */
         .search-wrap{position:sticky;top:16px;z-index:50;max-width:560px;margin:32px auto 40px;animation:fadeDown 1s .25s cubic-bezier(.22,1,.36,1) both}
         .search-inner{position:relative}
         .search-icon{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;display:flex}
@@ -38,7 +65,6 @@
         #searchInput::placeholder{color:var(--text-muted)}
         #searchInput:focus{background:rgba(255,255,255,.13);border-color:rgba(130,207,255,.5);box-shadow:0 8px 40px rgba(10,132,255,.25),inset 0 1px 0 rgba(255,255,255,.15),0 0 0 3px rgba(10,132,255,.15)}
         .section-label{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;padding-left:4px}
-        /* GRID */
         .grid-container{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
         .card{background:var(--glass);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:var(--r-card);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--card-shadow);transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease,border-color .3s;animation:cardIn .7s both;animation-delay:calc(var(--i)*50ms);cursor:pointer;text-decoration:none;color:inherit}
         @keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -73,13 +99,12 @@
 
 <div class="wrapper">
     <header>
-        <div class="logo-pill"><span class="dot"></span> Tulungagung · 19 Kecamatan</div>
+        <div class="logo-pill"><span class="dot"></span> Tulungagung · <?= $totalKec ?> Kecamatan</div>
         <h1>Kost Tulungagung</h1>
         <p>Temukan hunian terbaik di setiap kecamatan Kabupaten Tulungagung</p>
         <div class="stats-bar">
-            <div class="stat"><strong>190+</strong> Lokasi Kos</div>
-            <div class="stat"><strong>19</strong> Kecamatan</div>
-            <div class="stat"><strong>⭐ 4.8</strong> Rating</div>
+            <div class="stat"><strong><?= $totalKos ?>+</strong> Lokasi Kos</div>
+            <div class="stat"><strong><?= $totalKec ?></strong> Kecamatan</div>
         </div>
     </header>
 
@@ -93,64 +118,37 @@
     </div>
 
     <p class="section-label">Semua Kecamatan</p>
-    <main class="grid-container" id="grid"></main>
+    <main class="grid-container" id="grid">
+        <?php foreach ($kecamatanList as $i => $kec): ?>
+        <a class="card" href="kecamatan.php?slug=<?= urlencode(strtolower($kec['slug'])) ?>" data-name="<?= strtolower($kec['nama']) ?>" style="--i:<?= $i ?>">
+            <div class="card-img-wrap">
+                <img src="<?= htmlspecialchars(getImageSrc($kec['foto_url'])) ?>" alt="Kos di <?= htmlspecialchars($kec['nama']) ?>" class="card-img" loading="lazy">
+                <div class="card-img-overlay"></div>
+                <span class="card-badge"><?= $kec['jumlah_kos_real'] ?> Kos</span>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Kec. <?= htmlspecialchars($kec['nama']) ?></h3>
+                <div class="card-meta">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Kabupaten Tulungagung
+                </div>
+                <div class="map-wrapper">
+                    <iframe src="https://www.google.com/maps?q=Kecamatan%20<?= urlencode($kec['nama']) ?>%20Tulungagung&output=embed" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <span class="btn">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Lihat Lokasi Kos
+                </span>
+            </div>
+        </a>
+        <?php endforeach; ?>
+    </main>
     <div id="noResults" class="no-results">🔍 Kecamatan tidak ditemukan.<br>Periksa kembali ejaan Anda.</div>
 
-    <footer>© 2026 <span>Kost Tulungagung.com</span> — Pilihan Terbaik Kos di Tulungagung</footer>
+    <footer>© <?= date('Y') ?> <span>Kost Tulungagung.com</span> — Pilihan Terbaik Kos di Tulungagung</footer>
 </div>
 
 <script>
-const kecamatanList = [
-    "Tulungagung","Boyolangu","Kedungwaru","Ngantru","Kauman",
-    "Pagerejo","Karangrejo","Gondang","Sendang","Pagerwojo",
-    "Campurdarat","Besuki","Pakel","Bandung","Kalidawir",
-    "Ngunut","Rejotangan","Pucanglaban","Tanggunggunung"
-];
-const photoIds = [
-    "1502672260266-1c1ef2d93688","1493663284031-b7e3aefcae8e",
-    "1584622650111-993a426fbf0a","1554995207-c18c203602cb",
-    "1598928506311-c55ded91a20c","1484154218962-a197022b5858",
-    "1513694203232-719a280e022f","1524758631624-e2822e304c36",
-    "1540518614846-7eded433c457","1560185127-6ed189bf02f4",
-    "1560448204-61dc36dc98c8","1560184897-ae75f418493e",
-    "1522771739844-6a9f6d5f14af","1512917774080-9991f1c4c750",
-    "1502672260266-1c1ef2d93688","1584622650111-993a426fbf0a",
-    "1554995207-c18c203602cb","1598928506311-c55ded91a20c","1484154218962-a197022b5858"
-];
-const kosCounts = [24,18,15,12,9,8,11,13,7,6,10,14,8,9,16,20,17,5,4];
-
-const grid = document.getElementById('grid');
-kecamatanList.forEach((kec, index) => {
-    const card = document.createElement('a');
-    card.className = 'card';
-    card.href = `${kec}.html`;
-    card.setAttribute('data-name', kec.toLowerCase());
-    card.style.setProperty('--i', index);
-    const photoId = photoIds[index];
-    card.innerHTML = `
-        <div class="card-img-wrap">
-            <img src="https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&w=600&q=80" alt="Kos di ${kec}" class="card-img" loading="lazy">
-            <div class="card-img-overlay"></div>
-            <span class="card-badge">${kosCounts[index]}+ Kos</span>
-        </div>
-        <div class="card-content">
-            <h3 class="card-title">Kec. ${kec}</h3>
-            <div class="card-meta">
-                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Kabupaten Tulungagung
-            </div>
-            <div class="map-wrapper">
-                <iframe src="https://www.google.com/maps?q=Kecamatan%20${encodeURIComponent(kec)}%20Tulungagung&output=embed" allowfullscreen loading="lazy"></iframe>
-            </div>
-            <span class="btn">
-                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                Lihat Lokasi Kos
-            </span>
-        </div>
-    `;
-    grid.appendChild(card);
-});
-
 function searchFn() {
     const q = document.getElementById('searchInput').value.toLowerCase();
     const cards = document.querySelectorAll('.card');

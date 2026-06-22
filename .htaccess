@@ -1,0 +1,21 @@
+RewriteEngine On
+RewriteBase /
+
+# Redirect trailing slashes
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# Handle kecamatan pages: /NamaKecamatan or /NamaKecamatan.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([A-Za-z]+)\.html$ kecamatan.php?slug=$1 [L,QSA,NC]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([A-Za-z]+)$ kecamatan.php?slug=$1 [L,QSA,NC]
+
+# Protect config directory
+RewriteRule ^config/ - [F,L]
+
+# Protect backup directory
+RewriteRule ^backup/ - [F,L]
